@@ -20,6 +20,9 @@ var RadarChart = {
         backgroundTooltipColor: "#555",
         backgroundTooltipOpacity: "0.7",
         tooltipColor: "white",
+        onMove: function (d, i) {
+
+        },
         axisJoin: function (d, i) {
             return d.className || i;
         },
@@ -46,7 +49,7 @@ var RadarChart = {
                 var coords = d3.mouse(container);
 
                 tooltip.select("text").classed('visible', 1).style("fill", cfg.tooltipColor);
-                var padding = 5;
+                var padding = 10;
                 var bbox = tooltip.select("text").text(msg).node().getBBox();
 
                 tooltip.select("rect")
@@ -57,7 +60,7 @@ var RadarChart = {
                     .attr("height", bbox.height + (padding * 2))
                     .attr("rx", "5").attr("ry", "5")
                     .style("fill", cfg.backgroundTooltipColor).style("opacity", cfg.backgroundTooltipOpacity);
-                tooltip.attr("transform", "translate(" + (coords[0] + 10) + "," + (coords[1] - 10) + ")")
+                tooltip.attr("transform", "translate(" + (coords[0] + 30) + "," + (coords[1] - 30) + ")")
             }
         }
 
@@ -428,8 +431,12 @@ var RadarChart = {
                         polygon.attr('points', oldPoints.join(' '))
                         setTooltip(tooltip, cfg.tooltipFormatValue(newValue));
                     }
-                    if(cfg.changeable)
-                        circle.call(d3.behavior.drag().on("drag", move))
+
+                    if (cfg.changeable)
+                        circle.call(
+                            d3.behavior.drag()
+                                .on("drag", move)
+                        )
 
 
                     //Make sure layer order is correct
@@ -442,6 +449,8 @@ var RadarChart = {
                     // ensure tooltip is upmost layer
                     var tooltipEl = tooltip.node();
                     tooltipEl.parentNode.appendChild(tooltipEl);
+
+                    cfg.onMove(dobj, i)
                 }
             });
         }
