@@ -430,6 +430,8 @@ var RadarChart = {
                         oldPoints[i] = newX.toString(10) + ',' + newY.toString(10)
                         polygon.attr('points', oldPoints.join(' '))
                         setTooltip(tooltip, cfg.tooltipFormatValue(newValue));
+
+                        cfg.onMove(dobj, i)
                     }
 
                     if (cfg.changeable)
@@ -449,8 +451,6 @@ var RadarChart = {
                     // ensure tooltip is upmost layer
                     var tooltipEl = tooltip.node();
                     tooltipEl.parentNode.appendChild(tooltipEl);
-
-                    cfg.onMove(dobj, i)
                 }
             });
         }
